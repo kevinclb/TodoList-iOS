@@ -22,9 +22,9 @@ class TodoListViewController: UITableViewController {
         // Do any additional setup after loading the view.
         setTitleAndAppearance()
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist"))
-        //        loadItems()
+        loadItems()
     }
-
+    
     //MARK: - Table View Data Source Methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -53,6 +53,21 @@ class TodoListViewController: UITableViewController {
         
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
+        //This function line updates the value of the item title to "Completed"
+        //aka U(update) in CRUD. It's necessary to save the context
+        //for this change to go into effect.
+        //itemArray[indexPath.row].setValue("Completed", forKey: "title")
+        
+        //These lines remove an item
+        //which is an NSManagedObject, i.e. a row
+        //in a SQLite database.
+        
+        //context.delete(itemArray[indexPath.row])
+        //itemArray.remove(at: indexPath.row)
+        
+        //saveItems() calls context.save() to save any changes we've made to
+        //our local itemArray
+        
         saveItems()
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -68,8 +83,6 @@ class TodoListViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //what will happen when the user clicks the Add Item button on our UIAlert
-            
-            
             
             let newItem = Item(context: self.context)
             newItem.title = textField.text!
@@ -98,13 +111,13 @@ class TodoListViewController: UITableViewController {
 extension TodoListViewController {
     func setTitleAndAppearance() {
         self.title = "Todoey"
-
+        
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .systemBlue
         appearance.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 20.0),
                                           .foregroundColor: UIColor.white]
-
+        
         // Customizing our navigation bar
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.standardAppearance = appearance
@@ -127,19 +140,18 @@ extension TodoListViewController {
         
         tableView.reloadData()
     }
-
+    
+    func loadItems() {
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        do {
+            itemArray = try context.fetch(request)
+        } catch {
+            print("Error fetching data from context \(error)")
+        }
+    }
+    
+    func deleteItems() {
+        
+    }
 }
 
-//extension TodoListViewController {
-//    func loadItems() {
-//        if let data = try? Data(contentsOf: dataFilePath!) {
-//            let decoder = PropertyListDecoder()
-//            do {
-//                itemArray = try decoder.decode([Item].self, from: data)
-//            } catch {
-//                print("Error decoding item: \(error)" )
-//            }
-//
-//        }
-//    }
-//}
