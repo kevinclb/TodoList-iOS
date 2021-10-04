@@ -20,8 +20,8 @@ class TodoListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
         setTitleAndAppearance()
-        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist"))
         loadItems()
     }
     
@@ -105,7 +105,7 @@ class TodoListViewController: UITableViewController {
     
 }
 
-//MARK: - Extending the TodoListViewController to include acustom
+//MARK: - TodoListViewController custom navbar implementation
 //setTitleAndAppearance function since the attribute inspector method
 //of setting a custom navigation bar color seems to be buggy.
 extension TodoListViewController {
@@ -125,7 +125,7 @@ extension TodoListViewController {
     }
 }
 
-//MARK: - Extending the TodoViewListController to include a reusable
+//MARK: - TodoListViewController Core Data Methods
 //saveItems function which initializes an instance of
 //a property list (.plist) encoder object
 //The encoder object's main function, .encode(),
@@ -141,17 +141,40 @@ extension TodoListViewController {
         tableView.reloadData()
     }
     
-    func loadItems() {
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
         do {
             itemArray = try context.fetch(request)
         } catch {
             print("Error fetching data from context \(error)")
         }
+        tableView.reloadData()
+        
     }
     
     func deleteItems() {
         
     }
 }
+
+//MARK: - Search Bar Methods
+extension TodoListViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        //In order to read from the context, we must create a request
+        
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        
+        //NSPredicate allows us to query our databases using string comparisons
+        //String comparisons are by default case and diacritic sensitive.
+        //[cd] modifies this to allow for case/diacritic insensitivity.
+        
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        loadItems(with: request)
+        
+    }
+}
+
 
