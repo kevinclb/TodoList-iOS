@@ -7,13 +7,13 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class CategoryViewController: UITableViewController {
 
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-
-    var categoryArray = [Category]()
+    let realm = try! Realm()
+    
+    var categories: Results<Category>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,15 +27,15 @@ class CategoryViewController: UITableViewController {
     //MARK: - TableView Data Source Methods
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoryArray.count
+        return categories?.count ?? 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
 
-        let category = categoryArray[indexPath.row]
+        let category = categories?[indexPath.row]
 
-        cell.textLabel?.text = category.name
+        cell.textLabel?.text = category?.name ?? "No Categories added yet"
 
         return cell
     }
@@ -50,7 +50,7 @@ class CategoryViewController: UITableViewController {
         let destinationVC = segue.destination as! TodoListViewController
 
         if let indexPath = tableView.indexPathForSelectedRow {
-            destinationVC.selectedCategory = categoryArray[indexPath.row]
+            destinationVC.selectedCategory = categories?[indexPath.row]
         }
 
     }
@@ -65,13 +65,9 @@ class CategoryViewController: UITableViewController {
         let alert = UIAlertController(title: "Add New Todoey Category", message: "", preferredStyle: .alert)
 
         let action = UIAlertAction(title: "Add Category", style: .default) { (action) in
-            let newCategory = Category(context: self.context)
+            let newCategory = Category()
             newCategory.name = textField.text!
-            //there's no newCategory.done = false
-            //categories don't have a "done" attribute to initiate
-            self.categoryArray.append(newCategory)
-
-            self.saveCategories()
+            self.save(category: newCategory)
         }
 
         alert.addTextField { (alertTextField) in
@@ -87,21 +83,19 @@ class CategoryViewController: UITableViewController {
 }
 
 extension CategoryViewController {
-    func saveCategories() {
+    func save(category: Category) {
         do {
-            try context.save()
+            try realm.write {
+                realm.add(category)
+            }
         } catch {
             print("Error saving context: ", error)
         }
         tableView.reloadData()
     }
 
-    func loadCategories(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
-        do {
-            categoryArray = try context.fetch(request)
-        } catch {
-            print("Error fetching data from context \(error)")
-        }
+    func loadCategories() {
+        categories = realm.objects(Category.self)
         tableView.reloadData()
     }
 }
