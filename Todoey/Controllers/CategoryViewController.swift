@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class CategoryViewController: UITableViewController {
+class CategoryViewController: SwipeTableViewController {
 
     let realm = try! Realm()
     
@@ -18,10 +18,9 @@ class CategoryViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setTitleAndAppearance()
+        tableView.rowHeight = 80
         loadCategories()
     }
-
-
 
 
     //MARK: - TableView Data Source Methods
@@ -31,11 +30,11 @@ class CategoryViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
+        
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        
+        cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories added yet"
 
-        let category = categories?[indexPath.row]
-
-        cell.textLabel?.text = category?.name ?? "No Categories added yet"
 
         return cell
     }
@@ -100,6 +99,8 @@ extension CategoryViewController {
     }
 }
 
+
+//MARK: - Navbar Aesthetic Methods
 extension CategoryViewController {
     func setTitleAndAppearance() {
         self.title = "Todoey"
@@ -116,3 +117,4 @@ extension CategoryViewController {
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
 }
+

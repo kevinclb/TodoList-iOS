@@ -103,20 +103,12 @@ class TodoListViewController: UITableViewController {
 
 }
 
-//MARK: - TodoListViewController Core Data Methods
-//saveItems function which initializes an instance of
-//a property list (.plist) encoder object
-//The encoder object's main function, .encode(),
-//must be called within a "do { try } catch {}" block
+//MARK: - Model manipulation methods
 extension TodoListViewController {
 
     func loadItems() {
         todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
         tableView.reloadData()
-    }
-
-    func deleteItems() {
-
     }
 }
 
