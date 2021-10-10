@@ -16,7 +16,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-//        print(Realm.Configuration.defaultConfiguration.fileURL)
+//         White non-transucent navigatio bar, supports dark appearance
+        if #available(iOS 15, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .systemBlue
+
+            appearance.largeTitleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 40.0),
+                                                   .foregroundColor: UIColor.white]
+            appearance.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 25.0),
+                                                  .foregroundColor: UIColor.white]
+
+            UINavigationBar.appearance().standardAppearance = appearance
+            UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        }
+        
+        print(Realm.Configuration.defaultConfiguration.fileURL)
         do {
             _ = try Realm()
         } catch {

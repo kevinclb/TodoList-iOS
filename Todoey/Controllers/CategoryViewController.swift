@@ -5,12 +5,12 @@
 //  Created by Kevin Babou on 10/4/21.
 //  Copyright © 2021 App Brewery. All rights reserved.
 //
-
+//NSAttributedStringKey => NSAttributedString.Key
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class CategoryViewController: SwipeTableViewController {
-
     let realm = try! Realm()
     
     var categories: Results<Category>?
@@ -21,6 +21,13 @@ class CategoryViewController: SwipeTableViewController {
         loadCategories()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        guard let navBar = navigationController?.navigationBar else {
+            fatalError("Navigation controller does not exist.")
+        }
+        
+        navBar.backgroundColor = UIColor(hexString: "1D9BF6")
+    }
 
     //MARK: - TableView Data Source Methods
 
@@ -33,8 +40,8 @@ class CategoryViewController: SwipeTableViewController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories added yet"
-
-
+        cell.backgroundColor = UIColor(hexString: categories?[indexPath.row].color ?? "1D9BF6")
+        cell.textLabel?.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
         return cell
     }
 
@@ -65,6 +72,7 @@ class CategoryViewController: SwipeTableViewController {
         let action = UIAlertAction(title: "Add Category", style: .default) { (action) in
             let newCategory = Category()
             newCategory.name = textField.text!
+            newCategory.color = UIColor.randomFlat().hexValue()
             self.save(category: newCategory)
         }
 
@@ -120,16 +128,19 @@ extension CategoryViewController {
     func setTitleAndAppearance() {
         self.title = "Todoey"
 
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .systemBlue
-        appearance.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 20.0),
-                                              .foregroundColor: UIColor.white]
-
-        // Customizing our navigation bar
-        navigationController?.navigationBar.tintColor = .white
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+//        let appearance = UINavigationBarAppearance()
+//        appearance.configureWithOpaqueBackground()
+//        appearance.backgroundColor = .systemBlue
+//        
+//        appearance.largeTitleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 15.0),
+//                                               .foregroundColor: UIColor.white]
+//        appearance.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 80.0),
+//                                              .foregroundColor: UIColor.white]
+//
+//        // Customizing our navigation bar
+//        navigationController?.navigationBar.tintColor = .white
+//        navigationController?.navigationBar.standardAppearance = appearance
+//        navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
 }
 

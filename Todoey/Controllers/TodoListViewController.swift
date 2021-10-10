@@ -8,9 +8,10 @@
 
 import UIKit
 import RealmSwift
-
+import ChameleonFramework
 
 class TodoListViewController: SwipeTableViewController {
+    @IBOutlet weak var searchBar: UISearchBar!
     let realm = try! Realm()
     var todoItems: Results<Item>?
     var selectedCategory: Category? {
@@ -24,8 +25,35 @@ class TodoListViewController: SwipeTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        setTitleAndAppearance()
+        
+        
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        if let colorHex = selectedCategory?.color {
+            print("Selected category exists.")
+            self.title = selectedCategory!.name
+            guard let navBar = navigationController?.navigationBar else {
+                fatalError("Navigation controller does not exist.")
+            }
+            
+            if #available(iOS 15, *) {
+                let appearance = UINavigationBarAppearance()
+                appearance.configureWithOpaqueBackground()
+                appearance.backgroundColor = UIColor(hexString: colorHex)
+                appearance.largeTitleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 40.0),
+                                                       .foregroundColor: ContrastColorOf(UIColor(hexString: colorHex)!, returnFlat: true)]
+                appearance.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 25.0),
+                                                      .foregroundColor: UIColor.white]
+                navBar.tintColor = ContrastColorOf(UIColor(hexString: colorHex)!, returnFlat: true)
+                navBar.standardAppearance = appearance
+                navBar.scrollEdgeAppearance = appearance
+            }
+            
+            searchBar.barTintColor = UIColor(hexString: colorHex)
+        }
+    }
     //MARK: - Table View Data Source Methods
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -33,12 +61,13 @@ class TodoListViewController: SwipeTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
+        
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
-
         if let item = todoItems?[indexPath.row] {
             cell.textLabel?.text = item.title
             cell.accessoryType = item.done ? .checkmark : .none
+            cell.backgroundColor = UIColor(hexString: selectedCategory!.color)?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat(todoItems!.count))
+            cell.textLabel?.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
         } else {
             cell.textLabel?.text = "No Items Added"
         }
@@ -82,6 +111,7 @@ class TodoListViewController: SwipeTableViewController {
                         let newItem = Item()
                         newItem.title = textField.text!
                         newItem.dateCreated = Date()
+                        newItem.color = UIColor.randomFlat().hexValue()
                         currentCategory.items.append(newItem)
                     }
                 } catch {
@@ -149,18 +179,6 @@ extension TodoListViewController: UISearchBarDelegate {
 //of setting a custom navigation bar color seems to be buggy.
 extension TodoListViewController {
     func setTitleAndAppearance() {
-        self.title = "Items"
-
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .systemBlue
-        appearance.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 20.0),
-                                              .foregroundColor: UIColor.white]
-
-        // Customizing our navigation bar
-        navigationController?.navigationBar.tintColor = .white
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
 }
 

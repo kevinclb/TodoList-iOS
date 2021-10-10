@@ -11,6 +11,8 @@
 		8C01DB2C270ACC0400CAC7EB /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C01DB2B270ACC0400CAC7EB /* Appearance.swift */; };
 		8C3E45BF2710FD5A003E6BF5 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3E45BE2710FD5A003E6BF5 /* Item.swift */; };
 		8C3E45C12710FD66003E6BF5 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3E45C02710FD66003E6BF5 /* Category.swift */; };
+		8C8469E32712C4AF001526BB /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8469E22712C4AF001526BB /* NavigationViewController.swift */; };
+		8C8469E52712C5E8001526BB /* NavigationBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8469E42712C5E8001526BB /* NavigationBarController.swift */; };
 		8CD5744127126E3000B75951 /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD5744027126E3000B75951 /* SwipeTableViewController.swift */; };
 		A80C2B24F81730281D7E8A0A /* Pods_Todoey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAC62A8CB65FA6F7735444C0 /* Pods_Todoey.framework */; };
 		EB2BE4FA239524DB00FB933B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2BE4F9239524DB00FB933B /* AppDelegate.swift */; };
@@ -26,6 +28,8 @@
 		8C01DB2B270ACC0400CAC7EB /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
 		8C3E45BE2710FD5A003E6BF5 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		8C3E45C02710FD66003E6BF5 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		8C8469E22712C4AF001526BB /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
+		8C8469E42712C5E8001526BB /* NavigationBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarController.swift; sourceTree = "<group>"; };
 		8CD5744027126E3000B75951 /* SwipeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeTableViewController.swift; path = Todoey/SwipeTableViewController.swift; sourceTree = SOURCE_ROOT; };
 		EAC62A8CB65FA6F7735444C0 /* Pods_Todoey.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Todoey.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB2BE4F6239524DB00FB933B /* Todoey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todoey.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +77,8 @@
 				8CD5744027126E3000B75951 /* SwipeTableViewController.swift */,
 				8C01DB29270AC6E200CAC7EB /* CategoryViewController.swift */,
 				EB2BE4FD239524DB00FB933B /* TodoListViewController.swift */,
+				8C8469E22712C4AF001526BB /* NavigationViewController.swift */,
+				8C8469E42712C5E8001526BB /* NavigationBarController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -250,9 +256,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C8469E32712C4AF001526BB /* NavigationViewController.swift in Sources */,
 				8C01DB2C270ACC0400CAC7EB /* Appearance.swift in Sources */,
 				8C01DB2A270AC6E200CAC7EB /* CategoryViewController.swift in Sources */,
 				EB2BE4FE239524DB00FB933B /* TodoListViewController.swift in Sources */,
+				8C8469E52712C5E8001526BB /* NavigationBarController.swift in Sources */,
 				8CD5744127126E3000B75951 /* SwipeTableViewController.swift in Sources */,
 				8C3E45BF2710FD5A003E6BF5 /* Item.swift in Sources */,
 				EB2BE4FA239524DB00FB933B /* AppDelegate.swift in Sources */,
@@ -333,7 +341,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -388,7 +396,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
